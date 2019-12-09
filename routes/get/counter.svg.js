@@ -5,7 +5,7 @@ import { createHash } from 'crypto'
 
 const cache = {}
 
-const HOSTS = ['api.artd.eco', 'localhost:5000', 'www.artd.eco']
+const HOSTS = ['api.artd.eco', 'localhost:5000', 'localhost:3000', 'www.artd.eco']
 
 /**
  * @type {import('../..').Middleware}
@@ -111,7 +111,7 @@ const makeWindow = (count, d) => {
     width: 165,
     height: 50,
     noStretch: true,
-    content: [line, line2, line3],
+    content: [line, line2, ...(count ? [line3] : [])],
     noShadow: true,
   })
   return res
