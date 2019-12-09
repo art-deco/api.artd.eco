@@ -109,15 +109,15 @@
     "@wrote/read" "1.0.0"
     rqt "3.0.1"
 
-"@idio/router@1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@idio/router/-/router-1.3.1.tgz#2c6c1297e62109ff03a633cfd2189fb25fefe0ab"
-  integrity sha512-cL8wffm1bGn9Zo+N1p1o7/1IH4S+Ys5DR4ns6OFfzchbHuMd0fulXM9Br1NivV4pM+RDkaUeRQGF+NEDmxj9+g==
+"@idio/router@1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@idio/router/-/router-1.3.2.tgz#b361db66df10edede2a3768220a40424339792b4"
+  integrity sha512-CZ17i+QI1XucvpqIu1Ie4pTQjERBdZ0fi/4n+d3L/xUjxkw+pvonq6CeIkg/tPXjLLBUdIDc4IzZZZC4B+yq+A==
   dependencies:
-    "@wrote/read-dir-structure" "^1.0.3"
-    erte "^1.1.7"
-    node-watch "0.6.0"
-    static-analysis "^1.3.3"
+    "@wrote/read-dir-structure" "^1.3.0"
+    erte "^1.2.0"
+    node-watch "0.6.3"
+    static-analysis "^2.1.0"
 
 "@lemuria/popup@^1.1.1":
   version "1.1.1"
@@ -188,7 +188,7 @@
   dependencies:
     makepromise "^3.1.0"
 
-"@wrote/read-dir-structure@^1.0.3", "@wrote/read-dir-structure@^1.2.0":
+"@wrote/read-dir-structure@^1.2.0", "@wrote/read-dir-structure@^1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@wrote/read-dir-structure/-/read-dir-structure-1.3.0.tgz#3e0652807ec76085474ec427c2cf198f13a09be4"
   integrity sha512-+yseRsIOiOrYv0xVuRqDM1OTGytRW2UfLPCFCzG34mRcorOhd7Zy6EYiNbCM2GgEtmhCpHzIKyiLLuKh/M8RHA==
@@ -323,7 +323,7 @@ erotic@^2.1.0:
   dependencies:
     "@artdeco/clean-stack" "^1.1.1"
 
-erte@1.2.0, erte@^1.1.7:
+erte@1.2.0, erte@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/erte/-/erte-1.2.0.tgz#8b7dbf6ad822d96f071947d20d5f440623f10769"
   integrity sha512-saxyNviRCvFENCyZ66O58cY8icaraVeQOgGks6ujsBeS7zf3yyjXrhyfMpERZo7SJH1KKdXcSQqgemxW6eIpjA==
@@ -451,10 +451,10 @@ nicer@^1.0.0:
   resolved "https://registry.yarnpkg.com/nicer/-/nicer-1.0.0.tgz#bd5c4c1a21a23dfda3333e000fd937f597c5b129"
   integrity sha512-fCnOyiFlH4h4r/aYq4wQJnbZPA43THJjdHyP2QlNHjfPZkfPaqBTlZfddXy1rX6CA53vyzXSm3fMt45gVaIJQQ==
 
-node-watch@0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/node-watch/-/node-watch-0.6.0.tgz#ab0703b60cd270783698e57a428faa0010ed8fd0"
-  integrity sha512-XAgTL05z75ptd7JSVejH1a2Dm1zmXYhuDr9l230Qk6Z7/7GPcnAs/UyJJ4ggsXSvWil8iOzwQLW0zuGUvHpG8g==
+node-watch@0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/node-watch/-/node-watch-0.6.3.tgz#9abf739ae0638435be6c0d1c99d4dc2e53df7317"
+  integrity sha512-InVPsg51EemnMVH3fvrrSVgqVBMlksZ/mK7ZDWx/NuWdNQi28wcVJX1/BP38alraPFXbRi9jZ35OfK4Ra7l8Bg==
 
 once@^1.3.1, once@^1.4.0:
   version "1.4.0"
@@ -604,10 +604,10 @@ spawncommand@2.2.0:
   dependencies:
     catchment "^3.3.0"
 
-static-analysis@^1.3.3:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/static-analysis/-/static-analysis-1.8.0.tgz#e15b24fa0da08375a266f0abb4e38116fc158eb1"
-  integrity sha512-GzrDSgLLBixAvLhtHm1xS6nevkoWoDoaNvc2qfbz3efxdl56pmos0txXqYRPHqzJJUg2xN5aQxpMKG5vUf9h7g==
+static-analysis@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/static-analysis/-/static-analysis-2.1.0.tgz#ade6c6f1ccf6f96f545b20534312aa6452fc2a72"
+  integrity sha512-2rNPCCcEWUKvyHiWmAqksD05pCI0RM9/if4NYpqryStrdpOlfKyhN9UJDavkVFsGfKdynIVwzh8YCcI5ETmeLQ==
 
 "statuses@>= 1.5.0 < 2":
   version "1.5.0"

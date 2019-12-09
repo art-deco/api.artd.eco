@@ -16,11 +16,15 @@ const client = new Client({
 ;(async () => {
   try {
     const [Mongo] = await Promise.all([
-      connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true }),
-      client.ping(),
+      connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true })
+        .then((m) => {
+          console.log('Connected to %s', c(mongo.replace(/.+@(.+)/, 'mongodb://$1'), 'yellow'))
+          return m
+        }),
+      client.ping().then(() => {
+        console.log('Connected to %s', c(elastic, 'red'))
+      }),
     ])
-    console.log('Connected to %s', c(elastic, 'red'))
-    console.log('Connected to %s', c(mongo.replace(/.+@(.+)/, 'mongodb://$1'), 'yellow'))
     const { url } = await Server({
       client, port: process.env.PORT,
       client_id: process.env.LINKEDIN_ID,
@@ -28,6 +32,7 @@ const client = new Client({
       github_id: process.env.GITHUB_ID,
       github_secret: process.env.GITHUB_SECRET,
       elastic, Mongo,
+      appName: 'api.artd.eco',
     })
     console.log('Started on %s', c(url, 'green'))
   } catch ({ stack }) {

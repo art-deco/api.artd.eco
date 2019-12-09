@@ -46,7 +46,7 @@
     "@idio/github": "^1.0.4",
     "@idio/idio": "^0.2.1",
     "@idio/linkedin": "1.4.0",
-    "@idio/router": "1.3.1",
+    "@idio/router": "1.3.2",
     "@lemuria/popup": "^1.1.1",
     "@svag/lib": "2.0.0",
     "@svag/window": "1.1.1",

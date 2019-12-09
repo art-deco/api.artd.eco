@@ -40,7 +40,7 @@ const PROD = NODE_ENV == 'production'
  * Starts the server.
  */
 export default async function Server({
-  client, port, client_id, client_secret,
+  client, port, client_id, client_secret, appName,
   watch = !PROD, elastic, Mongo, github_id, github_secret,
 }) {
   const { app, url, middleware } = await idio({
@@ -54,7 +54,7 @@ export default async function Server({
     logarithm: {
       middlewareConstructor() {
         const l = logarithm({
-          app: 'api.artd.eco',
+          app: appName,
           url: elastic,
         })
         return l
@@ -131,7 +131,7 @@ export default async function Server({
     prod: PROD,
     HOST: PROD ? HOST : url,
     CLOSURE: PROD || CLOSURE,
-    client, appName: 'api.artd.eco',
+    client, appName,
     render: (vnode, props = {}, Layout = DefaultLayout) => {
       return render(<Layout {...props}>
         {vnode}
