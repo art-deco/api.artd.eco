@@ -628,6 +628,11 @@ svg-captcha@^1.4.0:
   dependencies:
     opentype.js "^0.7.3"
 
+tablature@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tablature/-/tablature-1.2.0.tgz#9457933311a77762c8355f06cfd3a323479ec0bd"
+  integrity sha512-YP6rW3O/HNI/na0iv2bLXG0bfRyXo6sLbf/t3NXtfjC+jUiI21kcqn0OP5y/4uU1LOsrK2ImwWtgrvbfEz1efg==
+
 temp-context@2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/temp-context/-/temp-context-2.1.3.tgz#278502e47a2aa717334d5d84f18657ea42d7512c"

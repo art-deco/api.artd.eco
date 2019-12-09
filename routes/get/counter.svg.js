@@ -1,8 +1,11 @@
 import { makeElement } from '@svag/lib'
 import Window from '@svag/window'
+import { parse } from 'url'
 import { createHash } from 'crypto'
 
 const cache = {}
+
+const HOSTS = ['api.artd.eco', 'localhost:5000', 'www.artd.eco']
 
 /**
  * @type {import('../..').Middleware}
@@ -15,8 +18,12 @@ const counter = async (ctx) => {
 
   const { referer } = req.headers
   if (!referer) return ctx.body = helloWorld
-  const h = createHash('md5').update(referer).digest('hex')
-  ctx.etag = h
+
+  const { host: h } = parse(referer)
+  if (!HOSTS.includes(h)) return ctx.body = helloWorld
+
+  const e = createHash('md5').update(referer).digest('hex')
+  ctx.etag = e
 
   const item = cache[referer]
   if (!item) {
@@ -51,7 +58,7 @@ const counter = async (ctx) => {
       // cache for 1 minutes
       setTimeout(() => {
         delete cache[referer]
-      }, 1000 * 60 * 5)
+      }, 5 * MIN)
 
       const { body : { aggregations: {
         ids: { value: count },
@@ -67,6 +74,8 @@ const counter = async (ctx) => {
   const r = await cache[referer]
   ctx.body = r
 }
+
+const MIN = 1000 * 60
 
 const makeWindow = (count, d) => {
   const line = makeElement('text', {
