@@ -43,6 +43,7 @@ const counter = async (ctx) => {
               field: '_id',
             },
           },
+          min_date: { min: { field: 'date', format: 'yyyy-MM-dd' } },
         },
       },
     })
@@ -51,19 +52,23 @@ const counter = async (ctx) => {
       setTimeout(() => {
         delete cache[referer]
       }, 1000 * 60 * 5)
-      return res
+
+      const { body : { aggregations: {
+        ids: { value: count },
+        min_date: { value: min_date },
+      } } } = res
+      const d = new Date(min_date).toDateString()
+      return makeWindow(count, d)
     })
+  } else {
+    debugger
   }
 
   const r = await cache[referer]
-  const { body : { aggregations: {
-    ids: { value: count },
-  } } } = r
-  const res = makeWindow(count)
-  ctx.body = res
+  ctx.body = r
 }
 
-const makeWindow = (count) => {
+const makeWindow = (count, d) => {
   const line = makeElement('text', {
     attributes: {
       'font-family': 'Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace',
@@ -71,16 +76,25 @@ const makeWindow = (count) => {
       x: 0,
       y: 10,
     },
-    content: `$ ${count} people`,
+    content: `$ ${count} people have`,
   })
   const line2 = makeElement('text', {
     attributes: {
       'font-family': 'Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace',
       'font-size': '12px',
       x: 0,
-      y: 25,
+      y: 26,
     },
-    content: 'viewed this',
+    content: 'viewed this article',
+  })
+  const line3 = makeElement('text', {
+    attributes: {
+      'font-family': 'Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace',
+      'font-size': '12px',
+      x: 0,
+      y: 42,
+    },
+    content: `since ${d}`,
   })
 
   const res = Window({
@@ -88,7 +102,7 @@ const makeWindow = (count) => {
     width: 165,
     height: 50,
     noStretch: true,
-    content: [line, line2],
+    content: [line, line2, line3],
     noShadow: true,
   })
   return res
