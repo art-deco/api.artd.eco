@@ -29,8 +29,8 @@ function getBoundary(req) {
 
 const {
   NODE_ENV,
-  HOST = 'https://{{ name }}',
-  FRONT_END = 'https://{{ frontend }}',
+  HOST = 'https://api.artd.eco',
+  FRONT_END = 'https://www.artd.eco',
   CLOSURE, // for /comments page
   SESSION_KEY,
 } = process.env
@@ -54,7 +54,7 @@ export default async function Server({
     logarithm: {
       middlewareConstructor() {
         const l = logarithm({
-          app: '{{ name }}',
+          app: 'api.artd.eco',
           url: elastic,
         })
         return l
@@ -131,7 +131,7 @@ export default async function Server({
     prod: PROD,
     HOST: PROD ? HOST : url,
     CLOSURE: PROD || CLOSURE,
-    client, appName: '{{ name }}',
+    client, appName: 'api.artd.eco',
     render: (vnode, props = {}, Layout = DefaultLayout) => {
       return render(<Layout {...props}>
         {vnode}

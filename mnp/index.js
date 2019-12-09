@@ -16,7 +16,7 @@ const config = {
       getDefault ({ name }) {
         return name
       },
-      alias: 'https://mnpjs.github.io/idio/',
+      alias: 'api.artd.eco',
       afterQuestions(_, hostname) {
         return {
           hostname,
@@ -41,5 +41,5 @@ const config = {
 export default config
 
 /**
- * @typedef {import('mnp').Template} Template
+ * @typedef {import('api.artd.eco').Template} Template
  */
