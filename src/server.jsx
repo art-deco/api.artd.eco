@@ -96,6 +96,7 @@ export default async function Server({
       middlewareConstructor() {
         return frontend()
       },
+      use: !PROD,
       // config: {
       //   pragma: null,
       //   override: {

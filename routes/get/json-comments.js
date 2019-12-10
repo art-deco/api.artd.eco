@@ -13,6 +13,8 @@ export default async (ctx) => {
   const skip = (page - 1) * 20
 
   const Comments = ctx.mongo.collection('comments')
+
+  /** @type {import('../..').WebsiteComment[]} */
   let comments
   if (id) {
     comments = await Comments.find({
@@ -24,13 +26,14 @@ export default async (ctx) => {
     }).skip(skip).limit(20).sort({ date: -1 }).toArray()
 
   const cm = comments.map((comment) => {
-    const { linkedin_user: l, github_user: g } = comment
+    const { linkedin_user: l, github_user: g, hideGithub } = comment
     if (l && linkedin_user && l.id == linkedin_user.id) {
       comment.isAuthor = true
     } else if (g && github_user && github_user.html_url == g.html_url) {
       comment.isAuthor = true
     }
     if (l) delete l.id
+    if (hideGithub) delete comment.github_user
     delete comment.ip
     return comment
   })

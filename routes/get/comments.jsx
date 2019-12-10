@@ -31,9 +31,10 @@ export default async (ctx) => {
   const { csrf, linkedin_user, github_user } = ctx.session
 
   const Comments = ctx.mongo.collection('comments')
+  /** @type {import('../..').WebsiteComment[]} */
   const comments = await Comments.find().limit(20).toArray()
   const cm = comments.map((comment) => {
-    const { linkedin_user: l, github_user: g } = comment
+    const { linkedin_user: l, github_user: g, hideGithub } = comment
     if (l && linkedin_user && l.id == linkedin_user.id) {
       comment.isAuthor = true
     } else if (g && github_user && github_user.html_url == g.html_url) {

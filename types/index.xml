@@ -30,11 +30,14 @@
     <prop string name="_id" opt>id.</prop>
     <prop boolean name="isAuthor" opt>Whether the current session user wrote this comment.</prop>
     <prop string name="country" opt>The country name.</prop>
+    <prop string name="ip" opt>The IP address.</prop>
     <prop string name="name" opt>The display name.</prop>
     <prop string name="photo" opt>The photo to show.</prop>
+    <prop boolean name="path" opt>The path where the comment was left on.</prop>
+    <prop boolean name="hideGithub" opt>Whether to hide GitHub profile.</prop>
     <prop string name="comment">The text of the comment.</prop>
     <prop type="Date" name="date">When the comment was added.</prop>
     <prop type="_idio.GithubUser" name="github_user">GitHub user, if logged in.</prop>
-    <prop type="LinkedInUser" name="linkedin_user">Linkedin user, if logged in.</prop>
+    <prop type="LinkedInUser" name="linkedin_user">LinkedIn user, if logged in.</prop>
   </type>
 </types>

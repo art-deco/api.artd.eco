@@ -27,7 +27,9 @@ const validateCountry = (countryCode) => {
 /** @type {import('../..').Middleware} */
 export default async (ctx) => {
   // debugger
-  let { photo, csrf, name, country_code, comment, 'captcha-answer': captchaAnswer, captcha } = ctx.request.body
+  let { photo, csrf, name, country_code, comment, 'hide-github': hideGithub,
+    'captcha-answer': captchaAnswer, captcha,
+  } = ctx.request.body
   const { referer } = ctx.request.header
   if (!referer) throw new Error('!Request came from an unknown page.')
   const { path } = parse(referer)
@@ -78,17 +80,23 @@ export default async (ctx) => {
     throw new Error('!You cannot comment so often!')
   }
 
-  const res = await Comments.insertOne({
+  /**
+   * @type {import('../..').WebsiteComment}
+   */
+  const c = {
     linkedin_user,
     github_user,
     name,
     comment,
     photo,
+    ...(hideGithub ? { hideGithub } : {}),
     ...(guest ? { ip } : {}),
     ...(country ? { country } : {}),
     date: new Date(),
     path,
-  })
+  }
+
+  const res = await Comments.insertOne(c)
 
   ctx.body = { ok: res.result.ok, id: res.insertedId }
 }

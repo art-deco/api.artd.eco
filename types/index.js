@@ -1,4 +1,4 @@
-import render from '@depack/render'
+import render from '@depack/render' // eslint-disable-line
 
 export {}
 /**
@@ -27,10 +27,13 @@ export {}
  * @prop {string} [_id] id.
  * @prop {boolean} [isAuthor] Whether the current session user wrote this comment.
  * @prop {string} [country] The country name.
+ * @prop {string} [ip] The IP address.
  * @prop {string} [name] The display name.
  * @prop {string} [photo] The photo to show.
+ * @prop {boolean} [path] The path where the comment was left on.
+ * @prop {boolean} [hideGithub] Whether to hide GitHub profile.
  * @prop {string} comment The text of the comment.
  * @prop {Date} date When the comment was added.
  * @prop {_idio.GithubUser} github_user GitHub user, if logged in.
- * @prop {LinkedInUser} linkedin_user Linkedin user, if logged in.
+ * @prop {LinkedInUser} linkedin_user LinkedIn user, if logged in.
  */
