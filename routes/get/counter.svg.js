@@ -54,10 +54,11 @@ const counter = async (ctx) => {
         },
       },
     })
-    const clear = () => {
+    const clear = (err) => {
       setTimeout(() => {
         delete cache[referer]
       }, 5 * MIN)
+      throw err
     }
     cache[referer] = p.then((res) => {
       // cache for 1 minutes
