@@ -57,7 +57,8 @@
     "mongodb": "^3.4.0",
     "nicer": "^1.0.0",
     "svg-captcha": "^1.4.0",
-    "uid-safe": "2.1.5"
+    "uid-safe": "2.1.5",
+    "web-push": "^3.4.3"
   },
   "devDependencies": {
     "@a-la/jsx": "1.6.0",

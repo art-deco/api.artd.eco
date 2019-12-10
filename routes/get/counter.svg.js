@@ -72,8 +72,6 @@ const counter = async (ctx) => {
       clear()
       throw err
     })
-  } else {
-    debugger
   }
 
   const r = await cache[referer]

@@ -40,4 +40,11 @@
     <prop type="_idio.GithubUser" name="github_user">GitHub user, if logged in.</prop>
     <prop type="LinkedInUser" name="linkedin_user">LinkedIn user, if logged in.</prop>
   </type>
+
+  <type name="PushNotification">
+    <prop string name="title" opt>Title of the notification.</prop>
+    <prop boolean name="body" opt>Body of the notification.</prop>
+    <prop string name="icon" opt>The icon to show.</prop>
+    <prop string name="url" opt>The URL to open on click.</prop>
+  </type>
 </types>

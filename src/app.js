@@ -1,17 +1,25 @@
 import { connect } from 'mongodb'
 import { Client } from '@elastic/elasticsearch'
 import { c } from 'erte'
+import webpush from 'web-push'
 import Server from './server'
 
-const elastic = process.env.ELASTIC
-if (!elastic) throw new Error('Expecting ELASTIC env variable')
+const {
+  ELASTIC: elastic, MONGO_URL: mongo,
+  PUBLIC_VAPID: public_vapid, PRIVATE_VAPID: private_vapid,
 
-const mongo = process.env.MONGO_URL
+} = process.env
+
+if (!elastic) throw new Error('Expecting ELASTIC env variable')
 if (!mongo) throw new Error('Expecting MONGO_URL env variable')
+if (!private_vapid) throw new Error('Expecting PRIVATE_VAPID env variable')
+if (!public_vapid) throw new Error('Expecting PUBLIC_VAPID env variable')
 
 const client = new Client({
   node: elastic,
 })
+
+webpush.setVapidDetails('https://artd.eco', public_vapid, private_vapid)
 
 ;(async () => {
   try {
@@ -33,6 +41,7 @@ const client = new Client({
       github_secret: process.env.GITHUB_SECRET,
       elastic, Mongo,
       appName: 'api.artd.eco',
+      webpush,
     })
     console.log('Started on %s', c(url, 'green'))
   } catch ({ stack }) {

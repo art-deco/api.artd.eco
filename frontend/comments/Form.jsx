@@ -4,6 +4,7 @@ import Form, {
 import { getUserData } from '../Auth/lib'
 import CaptchaFormGroup from '../captcha'
 import countries from '../countries'
+import Subscriptions from './Subscriptions'
 
 export default class CommentForm extends SubmitForm {
   constructor() {
@@ -57,6 +58,7 @@ export default class CommentForm extends SubmitForm {
           </TextArea>
         </div>
       </FormGroup>
+      <Subscriptions host={host} />
       <SubmitButton disabled={!signedIn} loading={formLoading} type="warning"
         confirmText="Submit Data" />
       {error && `Error: ${error}`}

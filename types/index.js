@@ -36,4 +36,9 @@ export {}
  * @prop {Date} date When the comment was added.
  * @prop {_idio.GithubUser} github_user GitHub user, if logged in.
  * @prop {LinkedInUser} linkedin_user LinkedIn user, if logged in.
+ * @typedef {Object} PushNotification
+ * @prop {string} [title] Title of the notification.
+ * @prop {boolean} [body] Body of the notification.
+ * @prop {string} [icon] The icon to show.
+ * @prop {string} [url] The URL to open on click.
  */

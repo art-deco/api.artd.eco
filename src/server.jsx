@@ -104,7 +104,9 @@ export default async function Server({
       //   },
       // },
     },
-    static: { use: PROD, root: 'docs' },
+    static: [{ use: PROD, root: 'docs' }, {
+      use: !PROD, root: 'static',
+    }],
     session: { keys: [SESSION_KEY] },
 
     async jsonErrors(ctx, next) {
