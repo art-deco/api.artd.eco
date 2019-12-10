@@ -54,11 +54,10 @@ const counter = async (ctx) => {
         },
       },
     })
-    const clear = (err) => {
+    const clear = () => {
       setTimeout(() => {
         delete cache[referer]
       }, 5 * MIN)
-      if (err) throw err
     }
     cache[referer] = p.then((res) => {
       // cache for 1 minutes
@@ -69,7 +68,10 @@ const counter = async (ctx) => {
       } } } = res
       const d = new Date(min_date).toDateString()
       return makeWindow(count, d)
-    }).catch(clear)
+    }).catch((err) => {
+      clear()
+      throw err
+    })
   } else {
     debugger
   }
