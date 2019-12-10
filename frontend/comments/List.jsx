@@ -1,7 +1,6 @@
 import { Component } from 'preact'
-import callbackFetch from '../fetch'
+import fetch from 'unfetch'
 import './style.css'
-// import fetch from 'unfetch'
 
 export default class List extends Component {
   constructor() {
@@ -19,37 +18,39 @@ export default class List extends Component {
   /**
    * @param {string} [id]
    */
-  fetch(id) {
+  async fetch(id) {
     this.setState({ loading: true })
     const i = id ? `?id=${id}` : ''
-    callbackFetch(`${this.props.host}/json-comments${i}`, (error, res) => {
-      this.setState({ loading: false })
-      if (error) {
-        return this.setState({ error })
-      }
-      const { 'comments': comments, csrf } = res.json()
+    try {
+      const f = await fetch(`${this.props.host}/json-comments${i}`, {
+        credentials: 'include',
+      })
+      const { 'comments': comments, csrf } = await f.json()
       this.setState({ comments: [...comments, ...this.state.comments], csrf })
-    }, {
-      credentials: 'include',
-    })
+    } catch(err) {
+      this.setState({ error: err.message })
+    } finally {
+      this.setState({ loading: false })
+    }
   }
   render() {
     const { error, loading, comments, csrf } = this.state
+    const { signedIn, host, setReply } = this.props
     if (error)
       return (<div>Error loading list: {error}</div>)
     if (loading)
       return (<div>Loading list...</div>)
 
-    return <div className="CommentsList">
+    return (<div className="CommentsList">
       {comments.map((comment) => {
-        return <Item key={comment._id} comment={comment} csrf={csrf} host={this.props.host} onRemove={(id) => {
+        return (<Item setReply={setReply} signedIn={signedIn} key={comment._id} comment={comment} csrf={csrf} host={host} onRemove={(id) => {
           this.setState({
-            comments: this.state.comments.filter(({ _id }) => {
+            comments: comments.filter(({ _id }) => {
               return _id != id
             }),
           })
-        }} />
-      })}</div>
+        }} />)
+      })}</div>)
   }
 }
 
@@ -63,28 +64,35 @@ const Login = ({ github_user }) => {
  * @param {Object} opts
  * @param {WebsiteComment} opts.comment
  */
-const Item = ({ comment: { _id, country, isAuthor, name, photo, comment, date, github_user }, onRemove, csrf, host }) => {
+const Item = ({ comment: { _id, country, isAuthor, name, photo, comment, date, github_user },
+  onRemove, csrf, host, setReply, signedIn }) => {
   return (<div className="comment">
     <strong>{name || 'Anonymous'}</strong>{<Login github_user={github_user}/>}
     {country ? ` from ${country}`: ''}
-    {' '}on <em>{new Date(date).toLocaleString()}</em> {isAuthor && <a href="#" onClick={(e) => {
+    {' '}on <em>{new Date(date).toLocaleString()}</em> {isAuthor && <a href="#" onClick={async (e) => {
       e.preventDefault()
       const c = confirm('Are you sure you want to delete comment?')
-      if (c) {
-        callbackFetch(`${host}/remove-comment?csrf=${csrf}&id=${_id}`, (error, res) => {
-          if (error) return alert(error)
-          const { error: er } = res.json()
-          if (er) alert(er)
-          else if (res) onRemove(_id)
-        }, {
+      if (!c) return false
+      try {
+        const f = await fetch(`${host}/remove-comment?csrf=${csrf}&id=${_id}`, {
           credentials: 'include',
         })
+        const { error: er } = await f.json()
+        if (er) alert(er)
+        else onRemove(_id)
+      } catch(err) {
+        alert(err.message)
       }
       return false
     }}>
       Remove
-    </a>}
-    <div className="LCommentBlock">
+    </a>} <a href="#" style={signedIn ? undefined : 'color:grey' } onClick={(ev) => {
+      if (!signedIn) alert('Please sign in to reply')
+      else setReply({ id: _id, name })
+      ev.preventDefault()
+      return false
+    }}>Reply</a>
+    <div data-comment={_id} className="LCommentBlock">
       {photo && <div>
         <img src={photo} />
       </div>}

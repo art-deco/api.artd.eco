@@ -8,21 +8,41 @@ class App extends Auth {
   constructor() {
     super()
     this.list = null
+    this.state = {
+      auth: {},
+    }
   }
   render() {
+    const { auth, loading, replyTo } = this.state
+    const signedIn = auth.github_user || auth.linkedin_user
+
     return (<div>
-      <AppUser error={this.state.error} loading={this.state.loading} auth={this.state.auth} host={this.props.host} onSignOut={() => {
+      <AppUser error={this.state.error} loading={loading} auth={auth} host={this.props.host} onSignOut={() => {
         this.setState({ auth: {} })
       }} />
 
-      <CommentForm host={this.props.host} path={`${this.props.host}/comment`} auth={this.state.auth} submitFinish={async (res) => {
-        const { 'error': error, id } = await res.json()
-        if (!error && id) {
-          if (this.list) this.list.fetch(id)
-        }
-      }} />
+      <CommentForm signedIn={signedIn} replyTo={replyTo} host={this.props.host}
+        path={`${this.props.host}/comment`} auth={auth}
+        setReply={(val) => {
+          if (val === null) {
+            this.setState({ replyTo: undefined })
+          } else {
+            // no way
+          }
+        }}
+        submitFinish={async (res) => {
+          const { 'error': error, id } = await res.json()
+          if (!error && id) {
+            if (this.list) this.list.fetch(id)
+          }
+        }} />
 
-      <List host={this.props.host} ref={(e) => {
+      <List setReply={({ id, name }) => {
+        document.querySelector('[data-id="comment-text-area"]').scrollIntoView({
+          behavior: 'smooth',
+        })
+        this.setState({ replyTo: { id, name } })
+      }} signedIn={signedIn} host={this.props.host} ref={(e) => {
         this.list = e
       }} />
 

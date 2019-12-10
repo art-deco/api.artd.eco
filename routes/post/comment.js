@@ -28,7 +28,7 @@ const validateCountry = (countryCode) => {
 export default async (ctx) => {
   // debugger
   let { photo, csrf, name, country_code, comment, 'hide-github': hideGithub,
-    'captcha-answer': captchaAnswer, captcha,
+    'captcha-answer': captchaAnswer, captcha, 'sub-id': subId, 'reply-to': replyTo,
   } = ctx.request.body
   const { referer } = ctx.request.header
   if (!referer) throw new Error('!Request came from an unknown page.')
@@ -94,6 +94,8 @@ export default async (ctx) => {
     ...(country ? { country } : {}),
     date: new Date(),
     path,
+    subId,
+    replyTo,
   }
 
   const res = await Comments.insertOne(c)

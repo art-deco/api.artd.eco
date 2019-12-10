@@ -41,21 +41,21 @@ export default class Subscriptions extends Component {
       this.setState({ loading: false })
     }
   }
-  render() {
+  render({ disabled }) {
     const { p256dh, loading } = this.state
     return <FormGroup form-row col-2 label="Subscribe" help="Receive push notifications with replies.">
       <div className="col-10">
         <div className="form-check col-4">
-          <input checked={p256dh} onChange={(ev) => {
+          <input checked={disabled ? false : p256dh} onChange={(ev) => {
             if (!ev.currentTarget.checked) {
               const res = window.confirm('Are you sure you want so unsubscribe? You will stop receiving notifications from ALL comments on the website.')
               if (!res) return ev.currentTarget.checked = true
               this.unsubscribe()
             } else this.subscribe()
-          }} type="checkbox" className="form-check-input" id="subscribe"/>
+          }} disabled={disabled} type="checkbox" className="form-check-input" id="subscribe"/>
           <label className="form-check-label" htmlFor="subscribe">
-            {loading && <span style="color:grey">Checking your subscriptions...</span>}
-            {(!loading && p256dh) && <span style="color:green">You've subscribed 👍</span> }
+            {(!disabled && loading) && <span style="color:grey">Checking your subscriptions...</span>}
+            {(!disabled && !loading && p256dh) && <span style="color:green">You've subscribed 👍</span> }
           </label>
           <input value={p256dh} name="sub-id" type="hidden" />
         </div>

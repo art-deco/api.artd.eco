@@ -1,9 +1,7 @@
 import Form, {
-  FormGroup, Input, TextArea, SubmitButton, SubmitForm, Select,
+  FormGroup, Input, TextArea, SubmitButton, SubmitForm,
 } from '@depack/form'
 import { getUserData } from '../Auth/lib'
-import CaptchaFormGroup from '../captcha'
-import countries from '../countries'
 import Subscriptions from './Subscriptions'
 
 export default class CommentForm extends SubmitForm {
@@ -27,11 +25,13 @@ export default class CommentForm extends SubmitForm {
    * @param {!Object} [props]
    * @param {Auth} [props.auth]
    */
-  render({ onChange, host, auth, ...props }) {
+  render({ onChange, host, auth,
+    replyTo: { id: replyTo, name: replyToName } = {},
+    signedIn, setReply, ...props
+  }) {
     const { formLoading, error, success } = this.state
 
     const { picture, name } = getUserData(auth)
-    const signedIn = auth.github_user || auth.linkedin_user
 
     return (<Form {...props} onSubmit={this.submit.bind(this)} onChange={values => {
       this.reset()
@@ -53,12 +53,30 @@ export default class CommentForm extends SubmitForm {
       </FormGroup>
       <FormGroup form-row col-2 label="Comment*" help="Please enter your opinion">
         <div className="col-10">
-          <TextArea disabled={!signedIn} required name="comment">
+          <TextArea data-id="comment-text-area" disabled={!signedIn} required name="comment">
+            {replyToName && `${replyToName}, `}
             I think you're right/wrong because...
           </TextArea>
+          {replyTo && <input type="hidden" name="reply-to" value={replyTo} />}
         </div>
+        {replyTo && <div className="col-10">
+          You're replying to <a href="#" onClick={(ev) => {
+            ev.preventDefault()
+            const el = document.querySelector(`[data-comment="${replyTo}"]`)
+            el.scrollIntoView({ behavior: 'smooth' })
+            return false
+          }}>
+            {replyToName}.
+          </a> <a href="#" onClick={(ev) => {
+            ev.preventDefault()
+            setReply(null)
+            return false
+          }}>
+            Clear response
+          </a>
+        </div>}
       </FormGroup>
-      <Subscriptions host={host} />
+      <Subscriptions disabled={!signedIn} host={host} />
       <SubmitButton disabled={!signedIn} loading={formLoading} type="warning"
         confirmText="Submit Data" />
       {error && `Error: ${error}`}
