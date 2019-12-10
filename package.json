@@ -53,7 +53,7 @@
     "catchment": "3.3.0",
     "erte": "1.2.0",
     "koa-router": "^7.4.0",
-    "logarithm": "^2.0.0",
+    "logarithm": "^2.0.1",
     "mongodb": "^3.3.5",
     "nicer": "^1.0.0",
     "svg-captcha": "^1.4.0",

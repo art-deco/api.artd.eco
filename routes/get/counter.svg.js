@@ -38,7 +38,7 @@ const counter = async (ctx) => {
               { match: { 'path':  '/counter.svg' } },
             ],
             must_not: [
-              { match: { 'headers.from':  'googlebot' } },
+              { match: { 'headers.from': 'googlebot' } },
               { exists: { field: 'headers.if-none-match' } },
             ],
           },
@@ -54,19 +54,21 @@ const counter = async (ctx) => {
         },
       },
     })
-    cache[referer] = p.then((res) => {
-      // cache for 1 minutes
+    const clear = () => {
       setTimeout(() => {
         delete cache[referer]
       }, 5 * MIN)
-
+    }
+    cache[referer] = p.then((res) => {
+      // cache for 1 minutes
+      clear()
       const { body : { aggregations: {
         ids: { value: count },
         min_date: { value: min_date },
       } } } = res
       const d = new Date(min_date).toDateString()
       return makeWindow(count, d)
-    })
+    }).catch(clear)
   } else {
     debugger
   }

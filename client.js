@@ -46,9 +46,21 @@ const client = new Client({
   })
   const { total, hits } = res.body.hits
   console.log('total %s', total.value)
-  const data = hits.map(({ _source }) => _source)
+  const data = hits.map(({ _source }) => {
+    let country_iso_code
+    try {
+      country_iso_code = _source.geoip.country_iso_code
+    } catch (err) { }
+    let ip = _source.ip
+    if (country_iso_code) ip = `${ip} ${country_iso_code}`
+    const referer = _source.headers.referer
+    _source.ip = ip
+    _source.referer = referer
+    _source.date = new Date(_source.date).toLocaleString()
+    return _source
+  })
   const d = tablature({
-    keys: ['ip', 'path', 'status', 'date'],
+    keys: ['ip', 'path', 'status', 'date', 'referer'],
     data,
   })
   console.log(d)

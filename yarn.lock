@@ -398,10 +398,10 @@ koa-router@^7.4.0:
     path-to-regexp "^1.1.1"
     urijs "^1.19.0"
 
-logarithm@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/logarithm/-/logarithm-2.0.0.tgz#84b3e356e7cfd1a56ff7abc82413720d2ca56cc5"
-  integrity sha512-xEKeYKeimQsSOg1OH1XfzsCdvmr3FY0keB4sqbceBzIgc6nkyqSNdYEwO6ySN0t8msMkmgjTBQs0KANsYS7rSg==
+logarithm@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/logarithm/-/logarithm-2.0.1.tgz#c8a53ce491d5f9ff0cf7f294687964e93cc0442a"
+  integrity sha512-wJSiqmAhyyAxleePoOT1Tp0ZaQ5c0L8sh9016IEGc6Vbef/b77QYz/C3upevyWpdVNwBipBvZ8ag2fumw4WM4w==
 
 makepromise@^3.0.3, makepromise@^3.1.0:
   version "3.1.0"
