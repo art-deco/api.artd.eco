@@ -3,7 +3,7 @@ import webpush from 'web-push'
 /** @type {import('../..').Middleware} */
 export default async (ctx) => {
   const { mongo } = ctx
-  const { body: { endpoint, auth, p256dh, comments } = {} } = ctx.request
+  const { body: { endpoint, auth, p256dh, comments, updates } = {} } = ctx.request
   if (!endpoint) throw new Error('!Unknown subscription endpoint')
   if (!auth) throw new Error('!Unknown subscription auth')
   if (!p256dh) throw new Error('!Unknown subscription p256dh')
@@ -21,15 +21,16 @@ export default async (ctx) => {
 
   if (statusCode != 201) throw new Error('!Invalid web-push status code')
 
-  const res = await subscriptions.updateMany({ p256dh }, { $set: {
+  await subscriptions.updateMany({ p256dh }, { $set: {
     p256dh,
     auth,
     endpoint,
     comments,
+    updates,
   } }, { upsert: true })
 
   ctx.status = 200
-  ctx.body = { comments }
+  ctx.body = { comments, updates }
 }
 
 /**

@@ -55,7 +55,9 @@ async function send() {
   }
 }
 
-export const subscribe = async (register, host = '', path = 'subscribe', method = 'POST') => {
+export const subscribe = async (register, host = '', {
+  path = 'subscribe', method = 'POST', type = 'comments',
+} = {}) => {
   const res = await fetch(`${host}/vapid`)
   const vapidPublicKey = await res.text()
   if (!vapidPublicKey) throw new Error('Could not fetch vapid key.')
@@ -70,7 +72,7 @@ export const subscribe = async (register, host = '', path = 'subscribe', method 
   body.append('endpoint', endpoint)
   body.append('p256dh', p256dh)
   body.append('auth', auth)
-  body.append('comments', `true`)
+  body.append(type, 'true')
   const f = await fetch(`${host}/${path}`, {
     method,
     body,
