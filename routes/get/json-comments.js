@@ -36,7 +36,7 @@ export default async (ctx) => {
     }).toArray()
   } else {
     comments = await Comments.find(filter)
-      .skip(skip).limit(1).sort({ date: -1 }).toArray()
+      .skip(skip).limit(10).sort({ date: -1 }).toArray()
   }
 
   const cm = comments.map((comment) => {
