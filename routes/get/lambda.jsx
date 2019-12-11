@@ -7,6 +7,7 @@ export default async function lambda(ctx) {
     if (secretKey != process.env.LAMBDA_KEY)
       throw new Error('Wrong lambda key')
     // lambda invocation
+    console.log('invocation: %s', subject)
     const subs = mongo.collection('LambdaSubscriptions')
     const allSubs = await subs.find().toArray()
 
