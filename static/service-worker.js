@@ -5,12 +5,11 @@ self.addEventListener('push', async ({ data }) => {
   await self.registration.showNotification(title, {
     body,
     icon,
+    requireInteraction: true,
     data: { url },
   })
 })
 self.addEventListener('notificationclick', async ({ notification }) => {
-  console.log(notification)
-  debugger
   const { data: { url } } = notification
   if (!url) return
   await clients.openWindow(url)

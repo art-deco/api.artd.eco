@@ -26,7 +26,8 @@ function urlBase64ToUint8Array(base64String) {
  * @param {PushSubscription} subscription
  */
 const getSub = (subscription) => {
-  return JSON.parse(JSON.stringify(subscription))
+  const { endpoint, 'keys': { 'p256dh': p256dh, 'auth': auth } } = JSON.parse(JSON.stringify(subscription))
+  return { endpoint, keys: { p256dh, auth } }
 }
 
 export const checkSubscribed = async (register, host = '') => {
@@ -54,7 +55,7 @@ async function send() {
   }
 }
 
-export const subscribe = async (register, host) => {
+export const subscribe = async (register, host = '') => {
   const res = await fetch(`${host}/vapid`)
   const vapidPublicKey = await res.text()
   if (!vapidPublicKey) throw new Error('Could not fetch vapid key.')
@@ -69,7 +70,7 @@ export const subscribe = async (register, host) => {
   body.append('endpoint', endpoint)
   body.append('p256dh', p256dh)
   body.append('auth', auth)
-  body.append('comments', true)
+  body.append('comments', `true`)
   const f = await fetch(`${host}/subscribe`, {
     method: 'POST',
     body,

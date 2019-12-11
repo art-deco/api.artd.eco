@@ -35,6 +35,7 @@ export {}
  * @prop {string} comment The text of the comment.
  * @prop {string} [subId] The web push subscription ID.
  * @prop {string} [replyTo] The ID of the comment which was replied to.
+ * @prop {number} [replies] The number of replies.
  * @prop {Date} date When the comment was added.
  * @prop {_idio.GithubUser} github_user GitHub user, if logged in.
  * @prop {LinkedInUser} linkedin_user LinkedIn user, if logged in.

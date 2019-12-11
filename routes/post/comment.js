@@ -1,5 +1,7 @@
 import { parse } from 'url'
 import { createHash } from 'crypto'
+import { ObjectID } from 'mongodb'
+import webpush from 'web-push'
 import countries from '../../frontend/countries'
 
 const countriesMap = countries.reduce((acc, { name, code }) => {
@@ -8,6 +10,8 @@ const countriesMap = countries.reduce((acc, { name, code }) => {
 }, {})
 
 const { CAPTCHA_KEY } = process.env
+
+const DEFAULT_ICON = 'https://avatars3.githubusercontent.com/u/38815725?s=200&v=4'
 
 const validateCaptcha = (captchaHash, captchaAnswer) => {
   if (!CAPTCHA_KEY) throw new Error('!Server error: no captcha secret.')
@@ -28,9 +32,9 @@ const validateCountry = (countryCode) => {
 export default async (ctx) => {
   // debugger
   let { photo, csrf, name, country_code, comment, 'hide-github': hideGithub,
-    'captcha-answer': captchaAnswer, captcha, 'sub-id': subId, 'reply-to': replyTo,
+    'captcha-answer': captchaAnswer, captcha, 'sub-id': subId, 'reply-to': replyTo = null,
   } = ctx.request.body
-  const { referer } = ctx.request.header
+  const { request: { header: { referer }, ip } } = ctx
   if (!referer) throw new Error('!Request came from an unknown page.')
   const { path } = parse(referer)
 
@@ -50,25 +54,18 @@ export default async (ctx) => {
   validatePhoto(photo, ctx.session)
   const country = validateCountry(country_code)
 
-  if (!comment) throw new Error('!Comment is a required field.')
   const Comments = ctx.mongo.collection('comments')
 
-  const ip = ctx.request.ip
+  if (!comment) throw new Error('!Comment is a required field.')
 
   const lastHour = new Date()
   lastHour.setHours(lastHour.getHours() - 1)
   const guest = !github_user && !linkedin_user
 
   const $or = []
-  if (github_user) {
-    $or.push({ 'github_user.html_url': github_user.html_url })
-  }
-  if (linkedin_user) {
-    $or.push({ 'linkedin_user.id': linkedin_user.id })
-  }
-  if (guest) {
-    $or.push({ ip: ip })
-  }
+  if (github_user) $or.push({ 'github_user.html_url': github_user.html_url })
+  if (linkedin_user) $or.push({ 'linkedin_user.id': linkedin_user.id })
+  if (guest) $or.push({ ip: ip })
 
   const found = await Comments.countDocuments({
     $or,
@@ -77,7 +74,17 @@ export default async (ctx) => {
     },
   })
   if (found >= 5) {
-    throw new Error('!You cannot comment so often!')
+    // throw new Error('!You cannot comment so often!')
+  }
+
+  let repliedTo
+  if (replyTo) {
+    repliedTo = await Comments.findOneAndUpdate({ _id: ObjectID(replyTo) }, {
+      $inc: {
+        replies: 1,
+      },
+    })
+    // if (!modifiedCount) throw new Error('!Could not find the comment to reply to.')
   }
 
   /**
@@ -98,9 +105,45 @@ export default async (ctx) => {
     replyTo,
   }
 
-  const res = await Comments.insertOne(c)
+  try {
+    const res = await Comments.insertOne(c)
+    ctx.body = { ok: res.result.ok, id: res.insertedId }
+  } catch (err) {
+    if (replyTo) {
+      await Comments.updateOne({ _id: ObjectID(replyTo) }, {
+        $inc: { replies: -1 },
+      })
+    }
+    throw err
+  }
 
-  ctx.body = { ok: res.result.ok, id: res.insertedId }
+  if (repliedTo && repliedTo.value.subId) {
+    const payload = {
+      title: `Comment from ${name}`,
+      body: c.comment.slice(0, 50),
+      icon: photo || DEFAULT_ICON,
+      url: referer,
+    }
+    sendPush(ctx, subId, payload).catch(err => {
+      ctx.onerror(err)
+    })
+  }
+}
+
+const sendPush = async (ctx, id, payload) => {
+  const Subscriptions = ctx.mongo.collection('Subscriptions')
+  const sub = await Subscriptions.findOne({
+    p256dh: id,
+  })
+  if (sub) {
+    const { auth, p256dh, endpoint } = sub
+    const { statusCode } = await webpush.sendNotification({
+      endpoint, keys: { auth, p256dh },
+    }, JSON.stringify(payload))
+    if (statusCode != 201) {
+      throw new Error('Invalid webpush status code.')
+    }
+  }
 }
 
 /**

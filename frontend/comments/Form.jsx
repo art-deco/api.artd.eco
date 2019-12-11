@@ -25,10 +25,10 @@ export default class CommentForm extends SubmitForm {
    * @param {!Object} [props]
    * @param {Auth} [props.auth]
    */
-  render({ onChange, host, auth,
-    replyTo: { id: replyTo, name: replyToName } = {},
-    signedIn, setReply, ...props
+  render({ onChange, auth, ...props
   }) {
+    const { host, signedIn, setReply,
+      replyTo: { id: replyTo, name: replyToName } = {} } = this.context
     const { formLoading, error, success } = this.state
 
     const { picture, name } = getUserData(auth)

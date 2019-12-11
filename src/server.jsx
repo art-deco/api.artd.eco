@@ -104,7 +104,7 @@ export default async function Server({
       //   },
       // },
     },
-    static: [{ use: PROD, root: 'docs' }, {
+    static: [{ use: PROD || CLOSURE, root: 'docs' }, {
       use: !PROD, root: 'static',
     }],
     session: { keys: [SESSION_KEY] },
@@ -146,7 +146,7 @@ export default async function Server({
   })
 
   if (CLOSURE)
-    console.log('Testing Closure bundle: %s', 'closure/comments.js')
+    console.log('Testing Closure bundle: %s', 'docs/comments.js')
   const li = {
     session: middleware.session,
     client_id,

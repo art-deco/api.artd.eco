@@ -38,6 +38,7 @@
     <prop string name="comment">The text of the comment.</prop>
     <prop string name="subId" opt>The web push subscription ID.</prop>
     <prop string name="replyTo" opt>The ID of the comment which was replied to.</prop>
+    <prop number name="replies" opt>The number of replies.</prop>
     <prop type="Date" name="date">When the comment was added.</prop>
     <prop type="_idio.GithubUser" name="github_user">GitHub user, if logged in.</prop>
     <prop type="LinkedInUser" name="linkedin_user">LinkedIn user, if logged in.</prop>

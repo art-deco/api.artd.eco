@@ -5,7 +5,9 @@ import { parse } from 'url'
 export default async (ctx) => {
   const { csrf, linkedin_user, github_user } = ctx.session
 
-  const { page = 1, id } = ctx.request.query
+  const { page = 1, id, 'reply-to': replyTo = null,
+    'last-comment-id': lastCommentId,
+  } = ctx.request.query
   const { referer } = ctx.request.header
   if (!referer) throw new Error('The client did not pass referer header.')
   const { path } = parse(referer)
@@ -14,16 +16,28 @@ export default async (ctx) => {
 
   const Comments = ctx.mongo.collection('comments')
 
+  let lastId
+  if (lastCommentId) lastId = ObjectID(lastCommentId)
+
+  const filter = {
+    replyTo,
+    removed: null,
+    path,
+    ...(lastId ? { _id: {
+      $lt: lastId,
+    } } : {}),
+  }
+
   /** @type {import('../..').WebsiteComment[]} */
   let comments
   if (id) {
     comments = await Comments.find({
       _id: ObjectID(id),
     }).toArray()
-  } else
-    comments = await Comments.find({
-      path,
-    }).skip(skip).limit(20).sort({ date: -1 }).toArray()
+  } else {
+    comments = await Comments.find(filter)
+      .skip(skip).limit(1).sort({ date: -1 }).toArray()
+  }
 
   const cm = comments.map((comment) => {
     const { linkedin_user: l, github_user: g, hideGithub } = comment
@@ -35,6 +49,8 @@ export default async (ctx) => {
     if (l) delete l.id
     if (hideGithub) delete comment.github_user
     delete comment.ip
+    delete comment.subId
+    delete comment.replyTo
     return comment
   })
   ctx.body = { comments: cm, csrf }

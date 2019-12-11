@@ -30,7 +30,7 @@ const User = ( { auth, onSignout = () => {}, host }) => {
   const { picture, name } = getUserData(auth)
 
   return (<div>
-    <img src={picture} width="50"/>
+    <img src={picture} width="50" style="padding-right:.5rem;"/>
     Hello, {name}!{' '}
     <a href="#" onClick={(e) => {
       e.preventDefault()
