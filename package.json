@@ -11,7 +11,7 @@
     "test-build": "ALAMODE_ENV=test-build yarn test",
     "comments": "depack frontend/comments -o docs/comments.js -a -H -E --externs types/externs.js --externs node_modules/@idio/github/types/externs/user.js -i",
     "lambda": "depack frontend/lambda -o docs/lambda.js -a -H -E",
-    "subscribe": "depack frontend/subscribe -o docs/subscribe.js -a",
+    "subscribe": "depack frontend/subscribe -o docs/subscribe.js -a -i",
     "lint": "eslint .",
     "prod": "git push prod",
     "start": "node src",
