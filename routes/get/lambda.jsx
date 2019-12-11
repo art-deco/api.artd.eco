@@ -39,6 +39,7 @@ export default async function lambda(ctx) {
       <div>
         <div className="container" id="preact" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.5.3/preact.min.js" />
+        {CLOSURE && <script>{`window.host='https://api.artd.eco'`}</script>}
         <Closure closure={CLOSURE}/>
       </div>)
   }
