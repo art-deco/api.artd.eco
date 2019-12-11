@@ -6,14 +6,17 @@ if (btn) {
   const initial = btn.innerText
   btn.onclick = async (ev) => {
     ev.preventDefault()
-    const register = await navigator.serviceWorker.register('/service-worker.js', {
-      scope: '/',
-    })
-    subscribe(register, window['host'] || '', {
-      type: 'updates',
-    }).then(({ p256dh }) => {
-      if (p256dh) btn.innerText = `${initial} ✅`
-    })
+    reg(initial)
     return false
   }
+}
+
+const reg = async (initial) => {
+  const register = await navigator.serviceWorker.register('/service-worker.js', {
+    scope: '/',
+  })
+  const { p256dh } = await subscribe(register, window['host'] || '', {
+    type: 'updates',
+  })
+  if (p256dh) btn.innerText = `${initial} ✅`
 }
